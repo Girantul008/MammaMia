@@ -64,6 +64,17 @@ if MYSTERIUS == "1":
     from Src.API.cool import cool
 DDL_DOMAIN = config.DDL_DOMAIN
 app = FastAPI()
+from fastapi.middleware.cors import CORSMiddleware
+
+# --- CORS for Stremio ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],        # allow all origins — required so Stremio can fetch
+    allow_methods=["*"],        # allow GET, OPTIONS, HEAD, etc.
+    allow_headers=["*"],
+    allow_credentials=True,
+)
+# --- end CORS ---
 app.include_router(m3u8_clone)
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
